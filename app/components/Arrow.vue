@@ -1,0 +1,88 @@
+<template>
+  <div class="cp_arrows">
+    <div class="cp_arrow cp_arrowfirst"></div>
+    <div class="cp_arrow cp_arrowsecond"></div>
+  </div>
+</template>
+
+<style>
+.cp_arrows *,
+.cp_arrows *:before,
+.cp_arrows *:after {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.cp_arrows {
+  position: relative;
+  display: flex;
+  height: 150px; /*画面いっぱいにする場合100vh*/
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+}
+.cp_arrows .cp_arrow {
+  position: absolute;
+  top: 20%; /*着地点（サンプルは[class:cp_arrows]height300pxの50%）*/
+  left: 49%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  -webkit-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  opacity: 0;
+}
+.cp_arrows .cp_arrowfirst {
+  -webkit-animation: arrow-move08 2s ease-in-out infinite;
+  animation: arrow-move08 2s ease-in-out infinite;
+}
+.cp_arrows .cp_arrowsecond {
+  -webkit-animation: arrow-move08 2s 1s ease-in-out infinite;
+  animation: arrow-move08 2s 1s ease-in-out infinite;
+}
+.cp_arrows .cp_arrow:before,
+.cp_arrows .cp_arrow:after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 30px;
+  height: 3px;
+  content: '';
+  background: #e91e63;
+}
+.cp_arrows .cp_arrow:before {
+  -webkit-transform: rotate(30deg) translateX(-39%);
+  transform: rotate(30deg) translateX(-39%);
+  -webkit-transform-origin: top left;
+  transform-origin: top left;
+}
+.cp_arrows .cp_arrow:after {
+  -webkit-transform: rotate(-30deg) translateX(39%);
+  transform: rotate(-30deg) translateX(39%);
+  -webkit-transform-origin: top right;
+  transform-origin: top right;
+}
+@-webkit-keyframes arrow-move08 {
+  0% {
+    top: 0%; /*スタート地点（サンプルは[class:cp_arrows]height300pxの35%）*/
+    opacity: 0;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes arrow-move08 {
+  0% {
+    top: 0%; /*スタート地点（サンプルは[class:cp_arrows]height300pxの35%）*/
+    opacity: 0;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+</style>

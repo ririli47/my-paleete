@@ -1,67 +1,67 @@
 <template>
-  <section class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        my-palette
-      </h1>
-      <h2 class="subtitle">
-        My stupendous Nuxt.js project
-      </h2>
-      <div class="links">
-        <a href="https://nuxtjs.org/" target="_blank" class="button--green"
-          >Documentation</a
-        >
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-          >GitHub</a
-        >
-      </div>
+  <div class="text-xs-center">
+    <div class="chach-copy">
+      <p>あなただけのパレットがここにある。</p>
+      <button class="button is-primary" @click="login">Login</button>
     </div>
-  </section>
+
+    <nuxt-link v-scroll-to="'#anchor'" to>
+      <Arrow class="arrow" />
+    </nuxt-link>
+    <div id="anchor" class="usage">
+      <SlideIn />
+    </div>
+    <div class="usage"></div>
+  </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+import Arrow from '~/components/Arrow.vue'
+import SlideIn from '~/components/SlideIn.vue'
 
 export default {
   components: {
-    Logo
+    Arrow,
+    SlideIn
+  },
+  layout: 'LP',
+  methods: {
+    login() {
+      this.$router.push('/users')
+    }
   }
 }
 </script>
 
-<style>
-.container {
+<style scoped>
+.arrow {
   margin: 0 auto;
-  min-height: 100vh;
+}
+
+.chach-copy {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 80vh;
+  width: 100%;
+}
+
+p {
+  flex: 1;
+  margin: auto;
+  font-size: 4rem;
   text-align: center;
+  justify-content: middle;
 }
 
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
+.usage {
+  width: 100vw;
+  height: 50vh;
+  margin: 0 auto;
+  background-color: #f8f8f8;
 }
 
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
+@keyframes slide1 {
+  100% {
+    transform: translateX(80%);
+  }
 }
 </style>

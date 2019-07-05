@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="background">
     <nuxt />
   </div>
 </template>
@@ -15,7 +15,33 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
-  background-color: #f0f0f0;
+}
+
+.background {
+  background-color: rgb(255, 233, 161);
+  background: linear-gradient(rgb(255, 233, 161), rgb(255, 198, 101));
+}
+.background::after {
+  content: '';
+  height: 100vh;
+  width: 100vw;
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.25) 3%,
+      rgba(255, 255, 255, 0.25) 3%,
+      transparent 3%,
+      transparent 97%,
+      rgba(255, 255, 255, 0.25) 97%,
+      rgba(255, 255, 255, 0.25) 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.25) 3%,
+      rgba(255, 255, 255, 0.25) 3%,
+      transparent 3%,
+      transparent 97%,
+      rgba(255, 255, 255, 0.25) 97%,
+      rgba(255, 255, 255, 0.25) 100%
+    );
 }
 
 *,

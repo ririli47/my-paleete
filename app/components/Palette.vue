@@ -1,7 +1,10 @@
 <template>
   <div class="container">
     <div class="grid-wrap">
-      <div v-for="item in getColors" :key="item.id">
+      <div
+        v-for="item in this.$store.getters['color/getColors']"
+        :key="item.id"
+      >
         <div
           class="palette-wrap"
           @click="
@@ -9,21 +12,16 @@
             openModal()
           "
         >
-          <div :style="{ background: item.color }" class="palette"></div>
+          <div :style="{ background: item.colorCode }" class="palette"></div>
         </div>
-        <div :style="{ background: item.color }" class="right-side">
-          <p class="right-side-content">{{ selectedPalette.name }}</p>
-          <p class="right-side-content">
-            {{ selectedPalette.color }}
-          </p>
-        </div>
+        <div :style="{ background: item.colorCode }" class="right-side"></div>
       </div>
     </div>
     <div v-if="isModalOpen" class="modal">
       <div class="modal-background" @click="closeModal()"></div>
       <div class="modal-card">
         <header class="modal-card-head">
-          <p class="modal-card-title">{{ selectedPalette.name }}</p>
+          <p class="modal-card-title">{{ selectedPalette.description }}</p>
           <button
             class="delete"
             aria-label="close"
@@ -31,22 +29,37 @@
           ></button>
         </header>
         <section class="modal-card-body">
-          <p class="modal-detail-font text-left">
-            Name: {{ selectedPalette.name }}
-          </p>
           <div class="modal-color-border">
             <div
-              :style="{ background: selectedPalette.color }"
+              :style="{ background: selectedPalette.colorCode }"
               class="modal-color-part"
             ></div>
           </div>
           <p class="modal-detail-font text-right">
-            ColorCode: {{ selectedPalette.color }}
+            ColorCode: {{ selectedPalette.colorCode }}
+          </p>
+          <p class="modal-detail-font text-left">
+            Description: {{ selectedPalette.description }}
           </p>
         </section>
-        <footer class="modal-card-foot">
-          <button class="button is-primary button-width">Edit</button>
-          <button class="button is-danger button-width">Delete</button>
+        <footer v-if="!isEditMode" class="modal-card-foot">
+          <button
+            class="button is-primary button-width"
+            @click="setIsEditMode()"
+          >
+            Edit
+          </button>
+          <button class="button is-danger button-width" @click="deleteColor()">
+            Delete
+          </button>
+        </footer>
+        <footer v-else class="modal-card-foot">
+          <button class="button is-primary button-width" @click="updateColor()">
+            Update
+          </button>
+          <button class="button is-danger button-width" @click="cancel()">
+            Cancel
+          </button>
         </footer>
       </div>
     </div>
@@ -58,87 +71,39 @@ export default {
   data() {
     return {
       selectedPalette: {
-        name: '',
-        color: ''
+        description: '',
+        colorCode: ''
       },
-      isModalOpen: false
+      isModalOpen: false,
+      isEditMode: false
     }
   },
-  computed: {
-    getColors() {
-      return [
-        {
-          color: '#ff0000',
-          name: '炎'
-        },
-        {
-          color: '#00ff00',
-          name: '森'
-        },
-        {
-          color: '#0000ff',
-          name: '水'
-        },
-        {
-          color: '#ffff00',
-          name: '炎'
-        },
-        {
-          color: '#00ffff',
-          name: '森'
-        },
-        {
-          color: '#ff00ff',
-          name: '水'
-        },
-        {
-          color: '#000000',
-          name: '水'
-        },
-        {
-          color: '#ffffff',
-          name: '炎'
-        },
-        {
-          color: '#f0fff0',
-          name: '森'
-        },
-        {
-          color: '#f0f0ff',
-          name: '水'
-        },
-        {
-          color: '#fff0f0',
-          name: '炎'
-        },
-        {
-          color: '#0fff0f',
-          name: '森'
-        },
-        {
-          color: '#0f0fff',
-          name: '水'
-        },
-        {
-          color: '#f0f0f0',
-          name: '水'
-        }
-      ]
-    }
+  computed: {},
+  created() {
+    this.$store.dispatch('color/fetchColors')
   },
   methods: {
     setPaletteContent(palette) {
-      this.selectedPalette.name = palette.name
-      this.selectedPalette.color = palette.color
+      this.selectedPalette.description = palette.description
+      this.selectedPalette.colorCode = palette.colorCode
+    },
+    setIsEditMode() {
+      this.isEditMode = true
+    },
+    updateColor() {},
+    deleteColor() {},
+    cancel() {
+      this.isEditMode = false
     },
     openModal() {
       this.isModalOpen = true
     },
     closeModal() {
       this.isModalOpen = false
+      this.isEditMode = false
     },
     showPaletteContent() {
-      return [this.selectedPalette.name, this.selectedPalette.color]
+      return [this.selectedPalette.description, this.selectedPalette.color]
     }
   }
 }

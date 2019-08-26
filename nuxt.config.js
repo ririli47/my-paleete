@@ -32,7 +32,8 @@ export default {
    */
   plugins: [
     '~/plugins/vue-scrollto',
-    '~plugins/firebase'
+    '~/plugins/firebase',
+    '~/plugins/vue-notification'
   ],
 
   /*

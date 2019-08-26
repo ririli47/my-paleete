@@ -2,7 +2,6 @@
   <div class="text-xs-center">
     <div class="chach-copy">
       <p>あなただけのパレットがここにある。</p>
-      <button class="button is-primary" @click="login">Login</button>
     </div>
 
     <nuxt-link v-scroll-to="'#anchor'" to>

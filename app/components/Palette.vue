@@ -2,7 +2,7 @@
   <div class="container">
     <div class="grid-wrap">
       <div
-        v-for="item in this.$store.getters['color/getColors']"
+        v-for="item in this.$store.getters['colors/getColors']"
         :key="item.id"
       >
         <div
@@ -16,12 +16,15 @@
         </div>
         <div :style="{ background: item.colorCode }" class="right-side"></div>
       </div>
+      <div class="palette-wrap new-colorb-button" @click="setIsAddMode()">
+        新しい色を追加<br />+
+      </div>
     </div>
     <div v-if="isModalOpen" class="modal">
       <div class="modal-background" @click="closeModal()"></div>
       <div class="modal-card">
         <header class="modal-card-head">
-          <p class="modal-card-title">{{ selectedPalette.description }}</p>
+          <p class="modal-card-title"></p>
           <button
             class="delete"
             aria-label="close"
@@ -35,14 +38,39 @@
               class="modal-color-part"
             ></div>
           </div>
-          <p class="modal-detail-font text-right">
+          <p
+            v-if="!isEditMode && !isAddMode"
+            class="modal-detail-font text-right"
+          >
             ColorCode: {{ selectedPalette.colorCode }}
           </p>
-          <p class="modal-detail-font text-left">
-            Description: {{ selectedPalette.description }}
-          </p>
+          <div v-else class="modal-detail-font text-left control">
+            <label class="label">ColorCode:</label>
+            <input
+              v-model="selectedPalette.colorCode"
+              class="input"
+              type="text"
+              placeholder=""
+            />
+          </div>
+          <div
+            v-if="!isEditMode && !isAddMode"
+            class="modal-detail-font text-left control"
+          >
+            <label class="label">Description:</label>
+            <label>{{ selectedPalette.description }}</label>
+          </div>
+          <div v-else class="modal-detail-font text-left control">
+            <label class="label">Description:</label>
+            <input
+              v-model="selectedPalette.description"
+              class="input"
+              type="textarea"
+              placeholder=""
+            />
+          </div>
         </section>
-        <footer v-if="!isEditMode" class="modal-card-foot">
+        <footer v-if="!isEditMode && !isAddMode" class="modal-card-foot">
           <button
             class="button is-primary button-width"
             @click="setIsEditMode()"
@@ -53,7 +81,15 @@
             Delete
           </button>
         </footer>
-        <footer v-else class="modal-card-foot">
+        <footer v-else-if="isAddMode" class="modal-card-foot">
+          <button class="button is-primary button-width" @click="addColor()">
+            Add
+          </button>
+          <button class="button is-danger button-width" @click="cancel()">
+            Cancel
+          </button>
+        </footer>
+        <footer v-else-if="isEditMode" class="modal-card-foot">
           <button class="button is-primary button-width" @click="updateColor()">
             Update
           </button>
@@ -63,6 +99,7 @@
         </footer>
       </div>
     </div>
+    <notifications group="notify" position="bottom left" />
   </div>
 </template>
 
@@ -72,28 +109,117 @@ export default {
     return {
       selectedPalette: {
         description: '',
-        colorCode: ''
+        colorCode: '',
+        colorId: ''
       },
+      notifyTitle: '',
+      notifyMessage: '',
       isModalOpen: false,
-      isEditMode: false
+      isEditMode: false,
+      isAddMode: false
     }
   },
   computed: {},
   created() {
-    this.$store.dispatch('color/fetchColors')
+    this.$store.dispatch('colors/fetchColors')
   },
   methods: {
     setPaletteContent(palette) {
-      this.selectedPalette.description = palette.description
       this.selectedPalette.colorCode = palette.colorCode
+      this.selectedPalette.description = palette.description
+      this.selectedPalette.colorId = palette.colorId
     },
     setIsEditMode() {
       this.isEditMode = true
     },
-    updateColor() {},
-    deleteColor() {},
+    addColor() {
+      const colorCode = this.selectedPalette.colorCode
+      const description = this.selectedPalette.description
+      const userId = 'vS6ooGjbZckmapmynFlb'
+
+      this.$store
+        .dispatch('colors/addColor', {
+          colorCode,
+          description,
+          userId
+        })
+        .then(success => {
+          this.$notify({
+            group: 'notify',
+            type: 'success',
+            title: 'Create Success',
+            text: 'Please check your pallete'
+          })
+        })
+        .catch(error => {
+          console.log(error)
+          this.$notify({
+            group: 'notify',
+            type: 'error',
+            title: 'Create Faild',
+            text: 'Please check your pallete'
+          })
+        })
+      this.closeModal()
+    },
+    updateColor() {
+      const colorCode = this.selectedPalette.colorCode
+      const description = this.selectedPalette.description
+      const colorId = this.selectedPalette.colorId
+      const userId = 'vS6ooGjbZckmapmynFlb'
+
+      this.$store
+        .dispatch('colors/updateColor', {
+          colorCode,
+          description,
+          userId,
+          colorId
+        })
+        .then(success => {
+          this.$notify({
+            group: 'notify',
+            type: 'success',
+            title: 'Update Success',
+            text: 'Please check your pallete'
+          })
+        })
+        .catch(error => {
+          console.log(error)
+          this.$notify({
+            group: 'notify',
+            type: 'error',
+            title: 'Update Faild',
+            text: 'Please check your pallete'
+          })
+        })
+      this.closeModal()
+    },
+    deleteColor() {
+      const colorId = this.selectedPalette.colorId
+      this.$store
+        .dispatch('colors/deleteColor', colorId)
+        .then(success => {
+          this.$notify({
+            group: 'notify',
+            type: 'success',
+            title: 'Delete Success',
+            text: 'Please check your pallete'
+          })
+        })
+        .catch(error => {
+          console.log(error)
+          this.$notify({
+            group: 'notify',
+            type: 'error',
+            title: 'Delete Faild',
+            text: 'Please check your pallete'
+          })
+        })
+      this.closeModal()
+    },
     cancel() {
       this.isEditMode = false
+      this.isAddMode = false
     },
     openModal() {
       this.isModalOpen = true
@@ -101,6 +227,14 @@ export default {
     closeModal() {
       this.isModalOpen = false
       this.isEditMode = false
+      this.isAddMode = false
+    },
+    setIsAddMode() {
+      this.selectedPalette.colorCode = '#'
+      this.selectedPalette.description = ''
+
+      this.isModalOpen = true
+      this.isAddMode = true
     },
     showPaletteContent() {
       return [this.selectedPalette.description, this.selectedPalette.color]
@@ -176,6 +310,12 @@ export default {
   color: white;
 }
 
+.new-colorb-button {
+  border-radius: 10%;
+  border: 1px solid black;
+  text-align: center;
+}
+
 .modal {
   display: flex;
 }
@@ -204,6 +344,10 @@ export default {
 .modal-detail-font {
   flex: 1;
   color: #d0d0d0;
+}
+
+.field {
+  width: 50%;
 }
 
 .text-right {

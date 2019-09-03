@@ -2,17 +2,24 @@
   <section class="container">
     <div>
       <h2 class="subtitle">あなたのPalette</h2>
-      <Palette />
+      <div v-if="this.$store.getters['users/getUser'] != null">
+        <Palette />
+      </div>
+      <div v-else>
+        <DemoPalette />
+      </div>
     </div>
   </section>
 </template>
 
 <script>
 import Palette from '~/components/Palette.vue'
+import DemoPalette from '~/components/DemoPalette.vue'
 
 export default {
   components: {
-    Palette
+    Palette,
+    DemoPalette
   }
 }
 </script>

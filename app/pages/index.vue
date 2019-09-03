@@ -1,27 +1,22 @@
 <template>
-  <div class="text-xs-center">
+  <div class="background">
     <div class="chach-copy">
       <p>あなただけのパレットがここにある。</p>
+      <a class="button is-primary trial" href="/users"
+        >ログインせずに使ってみる</a
+      >
     </div>
-
-    <nuxt-link v-scroll-to="'#anchor'" to>
-      <Arrow class="arrow" />
-    </nuxt-link>
-    <div id="anchor" class="usage">
-      <SlideIn />
-    </div>
-    <div class="usage"></div>
   </div>
 </template>
 
 <script>
-import Arrow from '~/components/Arrow.vue'
-import SlideIn from '~/components/SlideIn.vue'
+// import Arrow from '~/components/Arrow.vue'
+// import SlideIn from '~/components/SlideIn.vue'
 
 export default {
   components: {
-    Arrow,
-    SlideIn
+    // Arrow,
+    // SlideIn
   },
   layout: 'LP',
   methods: {
@@ -39,16 +34,52 @@ export default {
 
 .chach-copy {
   display: flex;
-  height: 80vh;
-  width: 100%;
+  flex-direction: column;
 }
 
+.background {
+  background-color: rgb(255, 233, 161);
+  background: linear-gradient(rgb(255, 233, 161), rgb(255, 198, 101));
+  height: 95vh;
+  width: 100vw;
+}
+.background::after {
+  content: '';
+  height: 95vh;
+  width: 100vw;
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.25) 3%,
+      rgba(255, 255, 255, 0.25) 3%,
+      transparent 3%,
+      transparent 97%,
+      rgba(255, 255, 255, 0.25) 97%,
+      rgba(255, 255, 255, 0.25) 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.25) 3%,
+      rgba(255, 255, 255, 0.25) 3%,
+      transparent 3%,
+      transparent 97%,
+      rgba(255, 255, 255, 0.25) 97%,
+      rgba(255, 255, 255, 0.25) 100%
+    );
+}
 p {
   flex: 1;
   margin: auto;
+  margin-top: 20%;
   font-size: 4rem;
   text-align: center;
-  justify-content: middle;
+  justify-content: center;
+  align-content: middle;
+}
+
+.trial {
+  margin: auto;
+  margin-top: 10%;
+  font-size: 2rem;
+  text-align: center;
 }
 
 .usage {

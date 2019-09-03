@@ -2,7 +2,7 @@
   <div class="container">
     <div class="grid-wrap">
       <div
-        v-for="item in this.$store.getters['colors/getColors']"
+        v-for="item in this.$store.getters['demoColors/getColors']"
         :key="item.id"
       >
         <div
@@ -120,9 +120,6 @@ export default {
     }
   },
   computed: {},
-  created() {
-    this.$store.dispatch('colors/fetchColors')
-  },
   methods: {
     setPaletteContent(palette) {
       this.selectedPalette.colorCode = palette.colorCode
@@ -135,13 +132,11 @@ export default {
     addColor() {
       const colorCode = this.selectedPalette.colorCode
       const description = this.selectedPalette.description
-      const userId = this.$store.getters['users/getUser'].uid
 
       this.$store
-        .dispatch('colors/addColor', {
+        .dispatch('demoColors/addColor', {
           colorCode,
-          description,
-          userId
+          description
         })
         .then(success => {
           this.$notify({
@@ -166,13 +161,11 @@ export default {
       const colorCode = this.selectedPalette.colorCode
       const description = this.selectedPalette.description
       const colorId = this.selectedPalette.colorId
-      const userId = this.$store.getters['users/getUser'].uid
 
       this.$store
-        .dispatch('colors/updateColor', {
+        .dispatch('demoColors/updateColor', {
           colorCode,
           description,
-          userId,
           colorId
         })
         .then(success => {
@@ -197,7 +190,7 @@ export default {
     deleteColor() {
       const colorId = this.selectedPalette.colorId
       this.$store
-        .dispatch('colors/deleteColor', colorId)
+        .dispatch('demoColors/deleteColor', colorId)
         .then(success => {
           this.$notify({
             group: 'notify',

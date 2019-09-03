@@ -1,5 +1,5 @@
 <template>
-  <div class="background">
+  <div>
     <nav class="navbar" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <a class="navbar-item" href="/"> My Palette</a>
@@ -18,46 +18,14 @@
       </div>
 
       <div id="navbarBasicExample" class="navbar-menu">
-        <div class="navbar-start">
-          <a class="navbar-item">
-            Home
-          </a>
-
-          <a class="navbar-item">
-            Documentation
-          </a>
-
-          <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link">
-              More
-            </a>
-
-            <div class="navbar-dropdown">
-              <a class="navbar-item">
-                About
-              </a>
-              <a class="navbar-item">
-                Jobs
-              </a>
-              <a class="navbar-item">
-                Contact
-              </a>
-              <hr class="navbar-divider" />
-              <a class="navbar-item">
-                Report an issue
-              </a>
-            </div>
-          </div>
-        </div>
-
         <div class="navbar-end">
           <div class="navbar-item">
             <div class="buttons">
-              <a class="button is-primary">
-                <strong>Sign up</strong>
+              <a class="button is-primary" @click="signUp">
+                <strong>SignUp</strong>
               </a>
-              <a href="/users" class="button is-light">
-                Log in
+              <a class="button is-light" @click="signIn">
+                SignIn
               </a>
             </div>
           </div>
@@ -67,6 +35,29 @@
     <nuxt />
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    async signIn() {
+      try {
+        console.log('starting...')
+        await this.$store.dispatch('users/googleSignIn')
+        console.log('loading...')
+
+        if (this.$store.getters['users/getUser'] != null) {
+          this.$router.push('/users')
+        } else {
+          Error('cannot login')
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    signUp() {}
+  }
+}
+</script>
 
 <style>
 html {
